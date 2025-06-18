@@ -9,7 +9,7 @@ import Register from './components/Auth/Register';
 import Navbar from './components/Common/Navbar';
 import HomePage from './pages/HomePage';
 import AdminDashboard from './components/Admin/AdminDashboard';
-import UserManagement from './components/Admin/UserManagement';
+import UserManagement from './components/Admin/UserManagement'
 import StoreManagement from './components/Admin/StoreManagement';
 import StoreList from './components/User/StoreList';
 import StoreOwnerDashboard from './components/StoreOwner/StoreOwnerDashboard';

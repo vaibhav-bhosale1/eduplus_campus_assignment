@@ -175,7 +175,7 @@ const StoreManagement: React.FC = () => {
                   <option value="">No Owner</option>
                   {storeOwners.map(owner => (
                     <option key={owner.id} value={owner.id}>
-                      {owner.name} ({owner.email})
+                      {owner.name}
                     </option>
                   ))}
                 </select>
