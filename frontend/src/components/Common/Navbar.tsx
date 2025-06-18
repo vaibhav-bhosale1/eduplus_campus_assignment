@@ -17,7 +17,10 @@ const Navbar: React.FC = () => {
         <div>
           {isAuthenticated ? (
             <>
-              <span className="mr-4">Welcome, {user?.name} ({user?.role.replace('_', ' ')})</span>
+            <span className="mr-4">
+              Welcome, {user?.name} ({user?.role ? user.role.replace('_', ' ') : 'Unknown Role'})
+            </span>
+
               {isAdmin && <Link to="/admin/dashboard" className="mr-4 hover:text-gray-300">Admin Dashboard</Link>}
               {isNormalUser && <Link to="/user/stores" className="mr-4 hover:text-gray-300">Browse Stores</Link>}
               {isStoreOwner && <Link to="/owner/dashboard" className="mr-4 hover:text-gray-300">Store Owner Dashboard</Link>}

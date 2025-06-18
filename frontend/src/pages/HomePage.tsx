@@ -15,7 +15,8 @@ const HomePage: React.FC = () => {
 
       {isAuthenticated ? (
         <div className="text-center">
-          <p className="text-xl text-gray-700 mb-4">You are logged in as <span className="font-semibold">{user?.role.replace('_', ' ')}</span>.</p>
+          <p className="text-xl text-gray-700 mb-4">You are logged in as <span className="font-semibold">{user?.role ? user.role.replace('_', ' ') : 'Unknown Role'
+}</span>.</p>
           {user?.role === 'SYSTEM_ADMIN' && (
             <Link to="/admin/dashboard" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg text-lg transition duration-300">
               Go to Admin Dashboard
