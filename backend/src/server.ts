@@ -2,8 +2,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { PrismaClient } from '@prisma/client';
-import authRoutes from './routes/authRoutes';
-import userRoutes from './routes/userRoutes';
+import authRoutes from '../src/routes/authRoutes';
+import userRoutes from '../src/routes/adminRoutes';
 import storeRoutes from './routes/storeRoutes';
 import ratingRoutes from './routes/ratingRoutes';
 import cors from 'cors';
