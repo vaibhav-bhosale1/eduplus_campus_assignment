@@ -1,7 +1,7 @@
 // backend/src/server.ts
 import express from 'express';
 import dotenv from 'dotenv';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../generated/prisma';
 import authRoutes from '../src/routes/authRoutes';
 import userRoutes from '../src/routes/adminRoutes';
 import storeRoutes from '../src/routes/storeOwnerRoutes';

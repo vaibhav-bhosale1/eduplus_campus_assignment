@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { prisma } from '../server';
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/generateToken';
-import { Role } from '@prisma/client';
+import { Role } from '../../generated/prisma'
 
 // User Registration
 export const registerUser = async (req: Request, res: Response) => {
@@ -11,26 +11,31 @@ export const registerUser = async (req: Request, res: Response) => {
 
   // Validation
   if (!name || !email || !password || !address) {
-    return res.status(400).json({ message: 'Please enter all fields' });
+     res.status(400).json({ message: 'Please enter all fields' });
+     return;
   }
   if (name.length < 20 || name.length > 60) {
-    return res.status(400).json({ message: 'Name must be between 20 and 60 characters' });
+     res.status(400).json({ message: 'Name must be between 20 and 60 characters' });
+     return;
   }
   if (address.length > 400) {
-    return res.status(400).json({ message: 'Address must be at most 400 characters' });
+     res.status(400).json({ message: 'Address must be at most 400 characters' });
+     return;
   }
   const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,16}$)/;
   if (!passwordRegex.test(password)) {
-    return res.status(400).json({
+     res.status(400).json({
       message: 'Password must be 8-16 characters long, include at least one uppercase letter and one special character'
     });
+    return;
   }
 
   try {
     const userExists = await prisma.user.findUnique({ where: { email } });
 
     if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
+       res.status(400).json({ message: 'User already exists' });
+       return;
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -57,10 +62,12 @@ export const registerUser = async (req: Request, res: Response) => {
       });
     } else {
       res.status(400).json({ message: 'Invalid user data' });
+      
     }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
+    
   }
 };
 
@@ -95,21 +102,24 @@ export const updatePassword = async (req: Request, res: Response) => {
   const userId = req.user?.id;
 
   if (!userId || !oldPassword || !newPassword) {
-    return res.status(400).json({ message: 'Please provide old and new passwords' });
+     res.status(400).json({ message: 'Please provide old and new passwords' });
+     return;
   }
 
   const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,16}$)/;
   if (!passwordRegex.test(newPassword)) {
-    return res.status(400).json({
+     res.status(400).json({
       message: 'New password must be 8-16 characters long, include at least one uppercase letter and one special character'
     });
+    return;
   }
 
   try {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user || !(await bcrypt.compare(oldPassword, user.password))) {
-      return res.status(401).json({ message: 'Invalid old password' });
+       res.status(401).json({ message: 'Invalid old password' });
+       return;
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -121,8 +131,10 @@ export const updatePassword = async (req: Request, res: Response) => {
     });
 
     res.status(200).json({ message: 'Password updated successfully' });
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
+    
   }
 };

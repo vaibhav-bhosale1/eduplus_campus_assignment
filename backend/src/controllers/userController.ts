@@ -1,7 +1,7 @@
 // backend/src/controllers/userController.ts
 import { Request, Response } from 'express';
 import { prisma } from '../server';
-import { Role } from '@prisma/client';
+
 
 // Get All Stores for Normal User (with user's rating if exists)
 export const getStoresForNormalUser = async (req: Request, res: Response) => {

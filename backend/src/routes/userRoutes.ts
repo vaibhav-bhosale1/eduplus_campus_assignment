@@ -2,8 +2,7 @@
 import { Router } from 'express';
 import { protect, authorizeRoles } from '../middleware/authMiddleware';
 import { getStoresForNormalUser } from '../controllers/userController';
-import { Role } from '@prisma/client';
-
+import { Role } from '../../generated/prisma'
 const router = Router();
 
 router.get('/stores', protect, authorizeRoles(Role.NORMAL_USER, Role.SYSTEM_ADMIN), getStoresForNormalUser);

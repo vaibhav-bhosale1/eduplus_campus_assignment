@@ -8,10 +8,12 @@ export const submitRating = async (req: Request, res: Response) => {
   const userId = req.user?.id;
 
   if (!userId || !storeId || !value) {
-    return res.status(400).json({ message: 'Please provide store ID and rating value' });
+     res.status(400).json({ message: 'Please provide store ID and rating value' });
+     return;
   }
   if (value < 1 || value > 5) {
-    return res.status(400).json({ message: 'Rating must be between 1 and 5' });
+     res.status(400).json({ message: 'Rating must be between 1 and 5' });
+     return;
   }
 
   try {
@@ -25,7 +27,8 @@ export const submitRating = async (req: Request, res: Response) => {
     });
 
     if (existingRating) {
-      return res.status(400).json({ message: 'You have already submitted a rating for this store. Please modify it instead.' });
+       res.status(400).json({ message: 'You have already submitted a rating for this store. Please modify it instead.' });
+       return;
     }
 
     const newRating = await prisma.rating.create({
@@ -37,6 +40,7 @@ export const submitRating = async (req: Request, res: Response) => {
     });
 
     res.status(201).json(newRating);
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -49,10 +53,12 @@ export const modifyRating = async (req: Request, res: Response) => {
   const userId = req.user?.id;
 
   if (!userId || !storeId || !value) {
-    return res.status(400).json({ message: 'Please provide store ID and new rating value' });
+     res.status(400).json({ message: 'Please provide store ID and new rating value' });
+     return;
   }
   if (value < 1 || value > 5) {
-    return res.status(400).json({ message: 'Rating must be between 1 and 5' });
+     res.status(400).json({ message: 'Rating must be between 1 and 5' });
+     return;
   }
 
   try {

@@ -8,11 +8,10 @@ import {
   getAllStoresAdmin,
   getAllUsersAdmin,
 } from '../controllers/adminController';
-import { Role } from '@prisma/client';
+import { Role } from '../../generated/prisma';
 
 const router = Router();
 
-// All admin routes should be protected and only accessible by SYSTEM_ADMIN
 router.use(protect, authorizeRoles(Role.SYSTEM_ADMIN));
 
 router.get('/dashboard-stats', getDashboardStats);

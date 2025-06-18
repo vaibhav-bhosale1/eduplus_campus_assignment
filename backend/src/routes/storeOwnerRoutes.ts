@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import { protect, authorizeRoles } from '../middleware/authMiddleware';
 import { getStoreOwnerDashboard } from '../controllers/storeOwnerController';
-import { Role } from '@prisma/client';
+import { Role } from '../../generated/prisma';
 
 const router = Router();
 
