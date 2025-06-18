@@ -15,8 +15,7 @@ const HomePage: React.FC = () => {
 
       {isAuthenticated ? (
         <div className="text-center">
-          <p className="text-xl text-gray-700 mb-4">You are logged in as <span className="font-semibold">{user?.role ? user.role.replace('_', ' ') : 'Unknown Role'
-}</span>.</p>
+          <p className="text-xl text-gray-700 mb-4">You are logged in as <span className="font-semibold">{user?.role ? user.role.replace('_', ' ') : 'Unknown role'}</span>.</p>
           {user?.role === 'SYSTEM_ADMIN' && (
             <Link to="/admin/dashboard" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg text-lg transition duration-300">
               Go to Admin Dashboard
@@ -34,18 +33,30 @@ const HomePage: React.FC = () => {
           )}
         </div>
       ) : (
-        <div className="flex space-x-4">
-          <Link
-            to="/login"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg text-lg transition duration-300"
-          >
-            Login
-          </Link>
+        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
           <Link
             to="/register"
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg text-lg transition duration-300"
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg text-lg transition duration-300 text-center"
           >
             Register as a Normal User
+          </Link>
+          <Link
+            to="/login?role=normal_user" // Pass query parameter for login page title hint
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg text-lg transition duration-300 text-center"
+          >
+            Login as Normal User
+          </Link>
+          <Link
+            to="/login?role=store_owner" // Pass query parameter for login page title hint
+            className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg text-lg transition duration-300 text-center"
+          >
+            Login as Store Owner
+          </Link>
+          <Link
+            to="/login?role=system_admin" // Pass query parameter for login page title hint
+            className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg text-lg transition duration-300 text-center"
+          >
+            Login as System Admin
           </Link>
         </div>
       )}

@@ -1,13 +1,13 @@
 // backend/src/controllers/authController.ts
 import { Request, Response } from 'express';
-import { prisma } from '../server';
+import { prisma } from '../server'; // Assuming prisma is exported from server.ts
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/generateToken';
-import { Role } from '../../generated/prisma'
+import { Role } from '../../generated/prisma'; // Correct import path for Prisma generated types
 
-// User Registration
+// User Registration (for NORMAL_USERs via public signup)
 export const registerUser = async (req: Request, res: Response) => {
-  const { name, email, password, address, role } = req.body;
+  const { name, email, password, address } = req.body; // 'role' should NOT be accepted from public registration
 
   // Validation
   if (!name || !email || !password || !address) {
@@ -34,7 +34,7 @@ export const registerUser = async (req: Request, res: Response) => {
     const userExists = await prisma.user.findUnique({ where: { email } });
 
     if (userExists) {
-       res.status(400).json({ message: 'User already exists' });
+       res.status(400).json({ message: 'User already exists with this email' });
        return;
     }
 
@@ -47,59 +47,58 @@ export const registerUser = async (req: Request, res: Response) => {
         email,
         password: hashedPassword,
         address,
-        role: role || Role.NORMAL_USER, // Default to NORMAL_USER if not specified
+        role: Role.NORMAL_USER, // Always default to NORMAL_USER for public registration
       },
     });
 
-    if (newUser) {
-      res.status(201).json({
-        id: newUser.id,
-        name: newUser.name,
-        email: newUser.email,
-        address: newUser.address,
-        role: newUser.role,
-        token: generateToken(newUser.id, newUser.role),
-      });
-    } else {
-      res.status(400).json({ message: 'Invalid user data' });
-      
-    }
+    // Ensure a user object is always returned if creation is successful
+    res.status(201).json({
+      id: newUser.id,
+      name: newUser.name,
+      email: newUser.email,
+      address: newUser.address,
+      role: newUser.role,
+      token: generateToken(newUser.id, newUser.role),
+    });
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-    
+    console.error('Registration error:', error);
+    res.status(500).json({ message: 'Server error during registration' });
   }
 };
 
-// User Login
+// User Login (single endpoint for all roles)
 export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
     const user = await prisma.user.findUnique({ where: { email } });
 
+    // Check if user exists and password matches
     if (user && (await bcrypt.compare(password, user.password))) {
+      // If credentials are valid, return the user data including their actual role
       res.json({
         id: user.id,
         name: user.name,
         email: user.email,
         address: user.address,
-        role: user.role,
+        role: user.role, // This is the crucial part: retrieve the actual role from the DB
         token: generateToken(user.id, user.role),
       });
     } else {
+      // Invalid email or password
       res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Server error during login' });
   }
 };
 
 // Update Password
 export const updatePassword = async (req: Request, res: Response) => {
   const { oldPassword, newPassword } = req.body;
-  const userId = req.user?.id;
+  const userId = req.user?.id; // Assuming req.user is populated by authMiddleware
 
   if (!userId || !oldPassword || !newPassword) {
      res.status(400).json({ message: 'Please provide old and new passwords' });
@@ -131,10 +130,9 @@ export const updatePassword = async (req: Request, res: Response) => {
     });
 
     res.status(200).json({ message: 'Password updated successfully' });
-    
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-    
+    console.error('Update password error:', error);
+    res.status(500).json({ message: 'Server error during password update' });
   }
 };

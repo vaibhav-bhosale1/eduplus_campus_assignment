@@ -6,6 +6,8 @@ import authRoutes from '../src/routes/authRoutes';
 import userRoutes from '../src/routes/adminRoutes';
 import storeRoutes from '../src/routes/storeOwnerRoutes';
 import ratingRoutes from '../src/routes/ratingRoutes';
+import adminRoutes from '../src/routes/adminRoutes'
+import storeOwnerRoutes from '../src/routes/storeOwnerRoutes'
 import cors from 'cors';
 
 dotenv.config();
@@ -19,9 +21,12 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/stores', storeRoutes);
 app.use('/api/ratings', ratingRoutes);
+app.use('/api/owner', storeOwnerRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('Store Rating API is running');

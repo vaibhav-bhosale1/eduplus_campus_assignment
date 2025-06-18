@@ -11,6 +11,9 @@ import {
 import { Role } from '../../generated/prisma';
 
 const router = Router();
+router.get('/test-admin', (req, res) => {
+  res.send('Admin test route hit successfully!');
+});
 
 router.use(protect, authorizeRoles(Role.SYSTEM_ADMIN));
 
