@@ -5,10 +5,9 @@ import { useAuth } from '../contexts/AuthContext';
 
 interface ProtectedRouteProps {
   allowedRoles?: Array<'SYSTEM_ADMIN' | 'NORMAL_USER' | 'STORE_OWNER'>;
-  children?: React.ReactNode; // ✅ add this line
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles, children }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
   const { isAuthenticated, user } = useAuth();
 
   if (!isAuthenticated) {
@@ -16,11 +15,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles, children 
   }
 
   if (allowedRoles && user && !allowedRoles.includes(user.role)) {
+    // Not authorized, redirect to an unauthorized page or home
     return <Navigate to="/" replace />;
   }
 
-  // ✅ Render children if passed, else render nested route <Outlet />
-  return <>{children ? children : <Outlet />}</>;
+  return <Outlet />;
 };
 
 export default ProtectedRoute;
