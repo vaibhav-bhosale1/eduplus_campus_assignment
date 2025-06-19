@@ -1,9 +1,9 @@
-// backend/src/controllers/storeOwnerController.ts
+
 import { Request, Response } from 'express';
 import { prisma } from '../server';
 
 
-// Define the shape of store with related ratings and users
+
 
 
 type StoreWithRatingsAndUsers = {

@@ -1,9 +1,9 @@
-// backend/src/controllers/userController.ts
+
 import { Request, Response } from 'express';
 import { prisma } from '../server';
 
 
-// Get All Stores for Normal User (with user's rating if exists)
+
 export const getStoresForNormalUser = async (req: Request, res: Response) => {
   const userId = req.user?.id;
   const { name, address, sortField, sortOrder } = req.query;
@@ -17,7 +17,7 @@ export const getStoresForNormalUser = async (req: Request, res: Response) => {
     if (sortField && ['name', 'address'].includes(sortField as string)) {
       orderBy[sortField as string] = sortOrder === 'desc' ? 'desc' : 'asc';
     } else {
-      orderBy.name = 'asc'; // Default sort
+      orderBy.name = 'asc'; 
     }
 
     const stores = await prisma.store.findMany({

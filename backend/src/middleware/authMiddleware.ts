@@ -1,11 +1,10 @@
-// backend/src/middleware/authMiddleware.ts
+
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
-import { PrismaClient, Role, User } from '../../generated/prisma'; // Use Prisma enum
+import { PrismaClient } from '../../generated/prisma'; 
 
 const prisma = new PrismaClient();
 
-// Custom decoded token interface
 interface DecodedToken {
   id: string;
   role: 'SYSTEM_ADMIN' | 'NORMAL_USER' | 'STORE_OWNER';
@@ -23,7 +22,7 @@ declare global {
     }
   }
 }
-// 🛡️ Middleware: Protect route using JWT
+
 export const protect: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   let token: string | undefined;
 
@@ -46,7 +45,7 @@ export const protect: RequestHandler = async (req: Request, res: Response, next:
       req.user = user;
        console.log('DEBUG (Protect): Token Decoded User ID:', decoded.id);
       console.log('DEBUG (Protect): User fetched from DB for token:', req.user);
-      next(); // ✅ no need to return next()
+      next(); 
       return;
     } catch (error) {
       console.error(error);
@@ -70,6 +69,6 @@ export const authorizeRoles = (...roles: Array<'SYSTEM_ADMIN' | 'NORMAL_USER' | 
       return;
     }
    console.log('DEBUG (AuthorizeRoles): Access GRANTED for user role:', req.user.role);
-    next(); // no return needed for next()
+    next(); 
   };
 };

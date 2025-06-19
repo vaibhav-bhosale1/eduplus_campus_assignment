@@ -1,4 +1,4 @@
-// backend/src/routes/adminRoutes.ts
+
 import { Router } from 'express';
 import { protect, authorizeRoles } from '../middleware/authMiddleware';
 import {

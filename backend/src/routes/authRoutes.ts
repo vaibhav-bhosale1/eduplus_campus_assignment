@@ -1,7 +1,7 @@
-// backend/src/routes/authRoutes.ts
+
 import { Router } from 'express';
 import { registerUser, loginUser, updatePassword } from '../controllers/authController';
-import { protect } from '../middleware/authMiddleware'; // Assuming protect middleware exists
+import { protect } from '../middleware/authMiddleware';
 
 const router = Router();
 
