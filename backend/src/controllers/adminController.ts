@@ -278,3 +278,34 @@ type UserWithStores = {
     return;
   }
 };
+
+export const getAllRatingsAdmin = async (req: Request, res: Response) => {
+  try {
+    const ratings = await prisma.rating.findMany({
+      include: {
+        user: { // Include the user who submitted the rating
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        store: { // Include the store that was rated
+          select: {
+            id: true,
+            name: true,
+            address: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc', // Order by most recent ratings first
+      },
+    });
+
+    res.status(200).json(ratings);
+  } catch (error) {
+    console.error('Error in getAllRatingsAdmin:', error);
+    res.status(500).json({ message: 'Server error fetching ratings for admin.' });
+  }
+};

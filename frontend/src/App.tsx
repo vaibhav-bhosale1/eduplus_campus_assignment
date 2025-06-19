@@ -15,7 +15,7 @@ import StoreList from './components/User/StoreList';
 import StoreOwnerDashboard from './components/StoreOwner/StoreOwnerDashboard';
 import NotFoundPage from './pages/NotFoundPage';
 import UpdatePasswordPage from './components/Auth/UpdatePasswordPage';
-
+import RatingManagement from './components/Admin/RatingManagement';
 function App() {
   return (
     <Router>
@@ -32,6 +32,7 @@ function App() {
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/users" element={<UserManagement />} />
             <Route path="/admin/stores" element={<StoreManagement />} />
+             <Route path="/admin/ratings" element={<RatingManagement />} />
           </Route>
 
           {/* Normal User Routes */}

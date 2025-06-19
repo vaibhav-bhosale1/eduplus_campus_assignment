@@ -7,6 +7,7 @@ import {
   addNewStore,
   getAllStoresAdmin,
   getAllUsersAdmin,
+  getAllRatingsAdmin,
 } from '../controllers/adminController';
 import { Role } from '../../generated/prisma';
 
@@ -22,5 +23,6 @@ router.post('/users', addNewUser);
 router.post('/stores', addNewStore);
 router.get('/stores', getAllStoresAdmin);
 router.get('/users', getAllUsersAdmin);
+router.get('/ratings', getAllRatingsAdmin);
 
 export default router;

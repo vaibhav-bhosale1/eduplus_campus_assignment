@@ -7,76 +7,78 @@ const HomePage: React.FC = () => {
   const { isAuthenticated, user } = useAuth();
 
   return (
-    <div>
-      <div className="min-h-[calc(100vh-64px)] bg-gradient-to-br from-indigo-50 via-white to-purple-50 relative overflow-hidden">
-        {/* Background decoration */}
-       <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width=%2260%22%20height=%2260%22%20viewBox=%220%200%2060%2060%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg%20fill=%22none%22%20fill-rule=%22evenodd%22%3E%3Cg%20fill=%22%23f3f4f6%22%20fill-opacity=%220.4%22%3E%3Ccircle%20cx=%2230%22%20cy=%2230%22%20r=%221%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 text-gray-800 p-4 sm:p-8">
+      {/* Main Content Area */}
+      <div className="max-w-4xl w-full text-center py-16 px-6 rounded-lg shadow-xl bg-white/90 backdrop-blur-sm border border-gray-100">
+        
+        {/* Header Section */}
+        <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-gray-900 leading-tight mb-6">
+          Store Ratings <span className="text-blue-600">Platform</span>
+        </h1>
+       
 
-
-        {/* Floating elements */}
-        <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full opacity-10 animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-pink-400 to-yellow-500 rounded-full opacity-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
-
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-[calc(100vh-64px)] px-4 py-8">
-          {/* Hero Section */}
-          <div className="text-center mb-12 max-w-4xl">
-            <div className="mb-6">
-              <h1 className="text-6xl md:text-7xl font-extrabold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 leading-tight">
-                Store Ratings
-              </h1>
-              <div className="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+        {isAuthenticated ? (
+          /* Authenticated User View */
+          <div className="mt-8">
+            <h2 className="text-3xl font-semibold mb-6 text-gray-800">
+              Welcome, <span className="text-blue-600">{user?.name}</span> ({user?.role ? user.role.replace('_', ' ') : 'Unknown role'})
+            </h2>
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
+              {user?.role === 'SYSTEM_ADMIN' && (
+                <Link
+                  to="/admin/dashboard"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 transform hover:-translate-y-1"
+                >
+                  Go to Admin Dashboard
+                </Link>
+              )}
+              {user?.role === 'NORMAL_USER' && (
+                <Link
+                  to="/user/stores"
+                  className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 transform hover:-translate-y-1"
+                >
+                  Browse Stores
+                </Link>
+              )}
+              {user?.role === 'STORE_OWNER' && (
+                <Link
+                  to="/owner/dashboard"
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 transform hover:-translate-y-1"
+                >
+                  View Your Store Dashboard
+                </Link>
+              )}
             </div>
-            <p className="text-xl md:text-2xl text-gray-600 leading-relaxed font-light">
-              Your premium platform to discover, rate, and manage stores with elegance
-            </p>
           </div>
+        ) : (
+          /* Unauthenticated User View */
+          /* Unauthenticated User View */
+<div className="mt-10 text-center">
+  <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
+    Join the experience today.
+  </h2>
+  <p className="text-gray-600 text-lg mb-8 max-w-xl mx-auto">
+    Rate your favorite stores, discover hidden gems, or manage your own storefront – all in one place.
+  </p>
 
-          {isAuthenticated ? (
-            <div className="text-center max-w-2xl">
-              <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20 mb-8">
-                <div className="flex items-center justify-center mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
-                </div>
+  <div className="flex flex-col sm:flex-row justify-center gap-4">
+    <Link
+      to="/register"
+      className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-300 transform hover:-translate-y-1"
+    >
+      Register Now
+    </Link>
+    <Link
+      to="/login"
+      className="bg-white border border-indigo-600 text-indigo-600 hover:bg-indigo-50 font-semibold py-3 px-6 rounded-lg shadow-md transition duration-300 transform hover:-translate-y-1"
+    >
+      Sign In
+    </Link>
+  </div>
+</div>
 
-                <p className="text-2xl text-gray-700 mb-2">Welcome back!</p>
-                <p className="text-lg text-gray-600 mb-8">
-                  You are logged in as{' '}
-                  <span className="font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                    {user?.role ? user.role.replace('_', ' ') : 'Unknown role'}
-                  </span>
-                </p>
-
-                <div className="space-y-4">
-                  {user?.role === 'SYSTEM_ADMIN' && (
-                    <Link to="/admin/dashboard" className="btn-blue">Go to Admin Dashboard</Link>
-                  )}
-                  {user?.role === 'NORMAL_USER' && (
-                    <Link to="/user/stores" className="btn-green">Browse Stores</Link>
-                  )}
-                  {user?.role === 'STORE_OWNER' && (
-                    <Link to="/owner/dashboard" className="btn-purple">View Your Store Dashboard</Link>
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="max-w-2xl w-full">
-              <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20 text-center">
-                <h2 className="text-3xl font-bold text-gray-800 mb-6">Get Started</h2>
-                <p className="text-gray-600 mb-8">Join our community or sign in to continue</p>
-
-                <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                  <Link to="/register" className="btn-green">Register</Link>
-                  <Link to="/login" className="btn-blue">Login</Link>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+        
+        )}
       </div>
     </div>
   );
