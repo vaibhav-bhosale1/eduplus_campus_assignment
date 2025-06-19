@@ -58,19 +58,33 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     isStoreOwner: false,
   });
 
-  useEffect(() => {
-    // On component mount, check if user data exists in localStorage
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      try {
-        const user = JSON.parse(storedUser) as User;
-        dispatch({ type: 'LOGIN', payload: user }); // Re-hydrate state from localStorage
-      } catch (e) {
-        console.error("Failed to parse user from localStorage on app start:", e);
-        dispatch({ type: 'LOGOUT' }); // Clear corrupted data
+ useEffect(() => {
+  const storedUser = localStorage.getItem('user');
+  if (storedUser) {
+    try {
+      const parsedUser = JSON.parse(storedUser);
+
+      const isValid =
+        parsedUser &&
+        typeof parsedUser.id === 'string' &&
+        typeof parsedUser.name === 'string' &&
+        typeof parsedUser.email === 'string' &&
+        typeof parsedUser.token === 'string' &&
+        ['SYSTEM_ADMIN', 'NORMAL_USER', 'STORE_OWNER'].includes(parsedUser.role);
+
+      if (isValid) {
+        dispatch({ type: 'LOGIN', payload: parsedUser });
+      } else {
+        throw new Error('Invalid user object structure');
       }
+    } catch (e) {
+      console.warn("Clearing invalid user data from localStorage:", e);
+      localStorage.removeItem('user');
+      dispatch({ type: 'LOGOUT' });
     }
-  }, []); // Run only once on mount
+  }
+}, []);
+// Run only once on mount
 
   // Define the logout function
   const logout = () => {
