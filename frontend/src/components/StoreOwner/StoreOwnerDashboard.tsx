@@ -129,7 +129,7 @@ return (
                    </tr>
                  </thead>
                  <tbody className="divide-y divide-gray-100">
-                   {dashboardData.usersWhoRated.map((rating, index) => (
+                   {dashboardData.usersWhoRated.map((rating, _index) => (
                      <tr key={rating.userId} className="hover:bg-blue-50/50 transition-colors duration-200">
                        <td className="px-8 py-6">
                          <div className="flex items-center">

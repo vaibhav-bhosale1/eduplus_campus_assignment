@@ -1,7 +1,7 @@
 // frontend/src/contexts/AuthContext.tsx
-import React, { createContext, useState, useEffect, useContext, useReducer } from 'react';
+import React, { createContext, useEffect, useContext, useReducer } from 'react';
 import type { ReactNode } from 'react';
-import api from '../services/api'; // Import api to use its interceptor
+
 
 interface User {
   id: string;

@@ -51,31 +51,49 @@ const StoreList: React.FC = () => {
 
   const handleSubmitRating = async (storeId: string) => {
     const rating = ratingToSubmit[storeId];
-    if (!rating || rating < 1 || rating > 5) {
-      alert('Please select a rating between 1 and 5.');
+    if (rating === undefined || rating < 1 || rating > 5) {
+      console.error('Validation Error: Please select a rating between 1 and 5.');
+      setError('Please select a rating between 1 and 5 before submitting.');
       return;
     }
     try {
       await api.post('/ratings', { storeId, value: rating });
-      alert('Rating submitted successfully!');
-      fetchStores(); // Refresh list to show updated rating
+      console.log('Success: Rating submitted successfully!');
+      setError('');
+      setRatingToSubmit(prev => {
+        const newState = { ...prev };
+        delete newState[storeId];
+        return newState;
+      });
+      fetchStores();
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to submit rating.');
+      const errorMessage = err.response?.data?.message || 'Failed to submit rating.';
+      console.error('API Error:', errorMessage);
+      setError(errorMessage);
     }
   };
 
   const handleModifyRating = async (storeId: string) => {
     const rating = ratingToSubmit[storeId];
-    if (!rating || rating < 1 || rating > 5) {
-      alert('Please select a rating between 1 and 5.');
+    if (rating === undefined || rating < 1 || rating > 5) {
+      console.error('Validation Error: Please select a rating between 1 and 5.');
+      setError('Please select a rating between 1 and 5 before modifying.');
       return;
     }
     try {
       await api.put('/ratings', { storeId, value: rating });
-      alert('Rating modified successfully!');
-      fetchStores(); // Refresh list
+      console.log('Success: Rating modified successfully!');
+      setError('');
+      setRatingToSubmit(prev => {
+        const newState = { ...prev };
+        delete newState[storeId];
+        return newState;
+      });
+      fetchStores();
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to modify rating.');
+      const errorMessage = err.response?.data?.message || 'Failed to modify rating.';
+      console.error('API Error:', errorMessage);
+      setError(errorMessage);
     }
   };
 
@@ -151,7 +169,7 @@ return (
          <div className="flex items-center">
            <div className="bg-red-100 rounded-full p-2 mr-3">
              <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
              </svg>
            </div>
            <p className="text-red-700 font-medium">{error}</p>
@@ -234,7 +252,7 @@ return (
                </tr>
              </thead>
              <tbody className="divide-y divide-gray-100">
-               {stores.map((store, index) => (
+               {stores.map((store, _index) => (
                  <tr key={store.id} className="hover:bg-blue-25 hover:bg-opacity-30 transition-all duration-200">
                    <td className="px-6 py-5">
                      <div className="flex items-center">
@@ -260,7 +278,7 @@ return (
                        <div className="flex items-center">
                          <div className="flex mr-2">
                            {[...Array(5)].map((_, i) => (
-                             <svg key={i} className={`w-4 h-4 ${i < Math.floor(store.overallRating) ? 'text-yellow-400' : 'text-gray-200'}`} fill="currentColor" viewBox="0 0 20 20">
+                             <svg key={i} className={`w-4 h-4 ${i < Math.floor(store.overallRating || 0) ? 'text-yellow-400' : 'text-gray-200'}`} fill="currentColor" viewBox="0 0 20 20">
                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                              </svg>
                            ))}
@@ -278,7 +296,7 @@ return (
                            <div className="flex items-center">
                              <div className="flex mr-2">
                                {[...Array(5)].map((_, i) => (
-                                 <svg key={i} className={`w-4 h-4 ${i < store.userSubmittedRating ? 'text-blue-400' : 'text-gray-200'}`} fill="currentColor" viewBox="0 0 20 20">
+                                 <svg key={i} className={`w-4 h-4 ${i < (store.userSubmittedRating || 0) ? 'text-blue-400' : 'text-gray-200'}`} fill="currentColor" viewBox="0 0 20 20">
                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                                  </svg>
                                ))}
@@ -293,7 +311,7 @@ return (
                          <div className="flex items-center space-x-3">
                            <select
                              className="p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-300 transition-all duration-200 text-sm"
-                             value={ratingToSubmit[store.id] || store.userSubmittedRating || ''}
+                             value={String(ratingToSubmit[store.id] || store.userSubmittedRating || '')} // Explicitly cast to string
                              onChange={(e) => handleRatingChange(store.id, parseInt(e.target.value))}
                            >
                              <option value="">Select Rating</option>

@@ -247,7 +247,7 @@ const Register: React.FC = () => {
       </div>
     </div>
 
-    <style jsx>{`
+    <style>{`
       .bg-grid-pattern {
         background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
         background-size: 24px 24px;
