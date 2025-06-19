@@ -7,12 +7,18 @@ interface Store {
   name: string;
   email: string;
   address: string;
-  averageRating: string | null; // <--- CHANGED: Now explicitly includes 'null'
+  averageRating: string | null;
   owner?: {
     id: string;
     name: string;
     email: string;
   } | null;
+}
+
+// New interface for Store Owner data for the dropdown
+interface StoreOwnerOption {
+  id: string;
+  name: string;
 }
 
 const StoreManagement: React.FC = () => {
@@ -35,8 +41,9 @@ const StoreManagement: React.FC = () => {
   const [newStoreOwnerId, setNewStoreOwnerId] = useState('');
   const [addStoreError, setAddStoreError] = useState('');
   const [addStoreSuccess, setAddStoreSuccess] = useState('');
-  // Assuming you have a way to fetch store owners for the dropdown, e.g.,
-  // const [storeOwners, setStoreOwners] = useState<{id: string; name: string}[]>([]);
+  
+  // State to hold fetched store owners for the dropdown
+  const [storeOwners, setStoreOwners] = useState<StoreOwnerOption[]>([]); // <--- UNCOMMENTED/ADDED
 
   const fetchStores = async () => {
     setLoading(true);
@@ -58,21 +65,21 @@ const StoreManagement: React.FC = () => {
     }
   };
 
-  // Function to fetch store owners for the dropdown (if needed)
-  /*
-  const fetchStoreOwners = async () => {
+  // Function to fetch store owners for the dropdown
+  const fetchStoreOwners = async () => { // <--- UNCOMMENTED/IMPLEMENTED
     try {
-      const res = await api.get('/admin/users?role=STORE_OWNER'); // Adjust API endpoint as needed
+      // Assuming your backend /admin/users endpoint can filter by role
+      const res = await api.get('/admin/users?role=STORE_OWNER'); 
       setStoreOwners(res.data.map((user: any) => ({ id: user.id, name: user.name })));
-    } catch (err) {
-      console.error('Failed to fetch store owners:', err);
+    } catch (err: any) { // Added error handling for fetchStoreOwners
+      console.error('Failed to fetch store owners:', err.response?.data?.message || err.message);
+      // You might want to set a specific error state for this, or just log
     }
   };
-  */
 
   useEffect(() => {
     fetchStores();
-    // fetchStoreOwners(); // Uncomment if you implement fetching store owners
+    fetchStoreOwners(); // <--- UNCOMMENTED: Call fetchStoreOwners on component mount
   }, [filterName, filterEmail, filterAddress, sortField, sortOrder]);
 
   const handleSort = (field: string) => {
@@ -90,7 +97,7 @@ const StoreManagement: React.FC = () => {
     setAddStoreSuccess('');
 
     try {
-      await api.post('/admin/stores', { // Fixed 'res' unused
+      await api.post('/admin/stores', {
         name: newStoreName,
         email: newStoreEmail,
         address: newStoreAddress,
@@ -103,7 +110,7 @@ const StoreManagement: React.FC = () => {
       setNewStoreAddress('');
       setNewStoreOwnerId('');
       fetchStores(); // Refresh store list
-      // fetchStoreOwners(); // Re-fetch owners in case new owner was created/assigned
+      fetchStoreOwners(); // <--- ADDED: Re-fetch owners in case a new owner was just created/assigned elsewhere
     } catch (err: any) {
       setAddStoreError(err.response?.data?.message || 'Failed to add store.');
     }
@@ -202,10 +209,9 @@ const StoreManagement: React.FC = () => {
                     onChange={(e) => setNewStoreOwnerId(e.target.value)}
                   >
                     <option value="">No Owner (Unassigned)</option>
-                    {/* Render fetched store owners here */}
-                    {/* {storeOwners.map(owner => (
+                    {storeOwners.map(owner => ( // <--- UNCOMMENTED AND USING storeOwners STATE
                       <option key={owner.id} value={owner.id}>{owner.name}</option>
-                    ))} */}
+                    ))}
                   </select>
                 </div>
                 
@@ -367,7 +373,7 @@ const StoreManagement: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {stores.map((store, _index) => ( // Fixed 'index' to '_index'
+                  {stores.map((store, _index) => (
                     <tr key={store.id} className="hover:bg-blue-50/50 transition duration-200 group">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
@@ -384,11 +390,11 @@ const StoreManagement: React.FC = () => {
                         <span className="text-slate-700">{store.address}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {store.averageRating !== null && store.averageRating !== 'N/A' ? ( // Check for both null and 'N/A'
+                        {store.averageRating !== null && store.averageRating !== 'N/A' ? (
                           <div className="flex items-center">
                             <div className="flex text-yellow-400 mr-2">
                               {[...Array(5)].map((_, i) => (
-                                <svg key={i} className={`w-4 h-4 ${i < Math.floor(parseFloat(store.averageRating || '0')) ? 'text-yellow-400' : 'text-slate-300'}`} fill="currentColor" viewBox="0 0 20 20"> {/* <--- FIX HERE: parseFloat and fallback */}
+                                <svg key={i} className={`w-4 h-4 ${i < Math.floor(parseFloat(store.averageRating || '0')) ? 'text-yellow-400' : 'text-slate-300'}`} fill="currentColor" viewBox="0 0 20 20">
                                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.922-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                 </svg>
                               ))}
@@ -402,7 +408,7 @@ const StoreManagement: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         {store.owner ? (
                           <span className="font-medium text-slate-900">
-                            {store.owner.name} ({store.owner.email}) {/* Accessing email here */}
+                            {store.owner.name} ({store.owner.email})
                           </span>
                         ) : (
                           <span className="text-slate-500">Unassigned</span>
