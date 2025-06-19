@@ -1,6 +1,7 @@
 // frontend/src/components/Admin/StoreManagement.tsx
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
+import Toast from '../Common/Toast'; // Import the new Toast component
 
 interface Store {
   id: string;
@@ -15,7 +16,6 @@ interface Store {
   } | null;
 }
 
-// New interface for Store Owner data for the dropdown
 interface StoreOwnerOption {
   id: string;
   name: string;
@@ -24,8 +24,8 @@ interface StoreOwnerOption {
 const StoreManagement: React.FC = () => {
   const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
+  const [error, setError] = useState(''); // Kept for main fetch error display
+  
   const [filterName, setFilterName] = useState('');
   const [filterEmail, setFilterEmail] = useState('');
   const [filterAddress, setFilterAddress] = useState('');
@@ -39,15 +39,28 @@ const StoreManagement: React.FC = () => {
   const [newStoreEmail, setNewStoreEmail] = useState('');
   const [newStoreAddress, setNewStoreAddress] = useState('');
   const [newStoreOwnerId, setNewStoreOwnerId] = useState('');
-  const [addStoreError, setAddStoreError] = useState('');
-  const [addStoreSuccess, setAddStoreSuccess] = useState('');
-  
-  // State to hold fetched store owners for the dropdown
-  const [storeOwners, setStoreOwners] = useState<StoreOwnerOption[]>([]); // <--- UNCOMMENTED/ADDED
+  // Replaced addStoreError/Success with toast states
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState<'success' | 'error' | 'info'>('info');
+
+  const [storeOwners, setStoreOwners] = useState<StoreOwnerOption[]>([]);
+
+  const showCustomToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToastMessage(message);
+    setToastType(type);
+    setShowToast(true);
+  };
+
+  const dismissToast = () => {
+    setShowToast(false);
+    setToastMessage('');
+    setToastType('info');
+  };
 
   const fetchStores = async () => {
     setLoading(true);
-    setError('');
+    setError(''); // Clear main error
     try {
       const params = new URLSearchParams();
       if (filterName) params.append('name', filterName);
@@ -65,21 +78,19 @@ const StoreManagement: React.FC = () => {
     }
   };
 
-  // Function to fetch store owners for the dropdown
-  const fetchStoreOwners = async () => { // <--- UNCOMMENTED/IMPLEMENTED
+  const fetchStoreOwners = async () => {
     try {
-      // Assuming your backend /admin/users endpoint can filter by role
       const res = await api.get('/admin/users?role=STORE_OWNER'); 
       setStoreOwners(res.data.map((user: any) => ({ id: user.id, name: user.name })));
-    } catch (err: any) { // Added error handling for fetchStoreOwners
+    } catch (err: any) {
       console.error('Failed to fetch store owners:', err.response?.data?.message || err.message);
-      // You might want to set a specific error state for this, or just log
+      // Not showing toast for this background fetch, but good to log
     }
   };
 
   useEffect(() => {
     fetchStores();
-    fetchStoreOwners(); // <--- UNCOMMENTED: Call fetchStoreOwners on component mount
+    fetchStoreOwners(); 
   }, [filterName, filterEmail, filterAddress, sortField, sortOrder]);
 
   const handleSort = (field: string) => {
@@ -93,29 +104,32 @@ const StoreManagement: React.FC = () => {
 
   const handleAddStore = async (e: React.FormEvent) => {
     e.preventDefault();
-    setAddStoreError('');
-    setAddStoreSuccess('');
+    dismissToast(); // Dismiss any existing toasts
+    // Clear addStoreError/Success states (no longer directly used but good practice if needed elsewhere)
+    // setAddStoreError(''); 
+    // setAddStoreSuccess('');
 
     try {
       await api.post('/admin/stores', {
         name: newStoreName,
         email: newStoreEmail,
         address: newStoreAddress,
-        ownerId: newStoreOwnerId || null, // Send null if no owner selected
+        ownerId: newStoreOwnerId || null, 
       });
-      setAddStoreSuccess('Store added successfully!');
+      showCustomToast('Store added successfully!', 'success');
       setShowAddStoreModal(false);
       setNewStoreName('');
       setNewStoreEmail('');
       setNewStoreAddress('');
       setNewStoreOwnerId('');
-      fetchStores(); // Refresh store list
-      fetchStoreOwners(); // <--- ADDED: Re-fetch owners in case a new owner was just created/assigned elsewhere
+      fetchStores(); 
+      fetchStoreOwners(); 
     } catch (err: any) {
-      setAddStoreError(err.response?.data?.message || 'Failed to add store.');
+      const msg = err.response?.data?.message || 'Failed to add store.';
+      showCustomToast(msg, 'error');
+      // setAddStoreError(msg); // If you still want to display an error directly in modal
     }
   };
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-6">
@@ -153,16 +167,9 @@ const StoreManagement: React.FC = () => {
                 <div className="w-16 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"></div>
               </div>
               
-              {addStoreError && (
-                <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg">
-                  {addStoreError}
-                </div>
-              )}
-              {addStoreSuccess && (
-                <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 rounded-lg">
-                  {addStoreSuccess}
-                </div>
-              )}
+              {/* addStoreError and addStoreSuccess replaced by Toast */}
+              {/* {addStoreError && (...) } */}
+              {/* {addStoreSuccess && (...) } */}
               
               <form onSubmit={handleAddStore} className="space-y-4">
                 <div>
@@ -209,7 +216,7 @@ const StoreManagement: React.FC = () => {
                     onChange={(e) => setNewStoreOwnerId(e.target.value)}
                   >
                     <option value="">No Owner (Unassigned)</option>
-                    {storeOwners.map(owner => ( // <--- UNCOMMENTED AND USING storeOwners STATE
+                    {storeOwners.map(owner => ( 
                       <option key={owner.id} value={owner.id}>{owner.name}</option>
                     ))}
                   </select>
@@ -286,7 +293,7 @@ const StoreManagement: React.FC = () => {
           </div>
         </div>
 
-        {/* Error Messages */}
+        {/* Error Messages (main fetch error) */}
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex items-center">
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -422,6 +429,15 @@ const StoreManagement: React.FC = () => {
           </div>
         )}
       </div>
+      {/* Toast Notification */}
+      {showToast && (
+        <Toast
+          message={toastMessage}
+          type={toastType}
+          onDismiss={dismissToast}
+          duration={3000} // Toast will disappear after 3 seconds
+        />
+      )}
     </div>
   );
 };
