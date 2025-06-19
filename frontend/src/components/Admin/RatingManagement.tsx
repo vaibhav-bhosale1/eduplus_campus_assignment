@@ -1,11 +1,11 @@
-// frontend/src/components/Admin/RatingManagement.tsx
+
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 
 interface Rating {
   id: string;
   value: number;
-  comment?: string; // Assuming you might have comments on ratings
+  comment?: string;
   createdAt: string;
   user: {
     id: string;
@@ -24,7 +24,7 @@ const RatingManagement: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // No filters or sorting yet, but can be added similarly to User/Store Management
+  
   const [sortField, setSortField] = useState('createdAt');
   const [sortOrder, setSortOrder] = useState('desc');
 
@@ -77,13 +77,13 @@ const RatingManagement: React.FC = () => {
                 </th>
                 <th
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => handleSort('store.name')} // Sorting by nested fields requires backend support or client-side sort
+                  onClick={() => handleSort('store.name')}
                 >
                   Store Name {sortField === 'store.name' && (sortOrder === 'asc' ? '▲' : '▼')}
                 </th>
                 <th
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => handleSort('user.name')} // Sorting by nested fields requires backend support or client-side sort
+                  onClick={() => handleSort('user.name')} 
                 >
                   User Name {sortField === 'user.name' && (sortOrder === 'asc' ? '▲' : '▼')}
                 </th>

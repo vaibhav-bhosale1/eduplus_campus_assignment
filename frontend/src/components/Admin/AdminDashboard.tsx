@@ -1,4 +1,4 @@
-// frontend/src/components/Admin/AdminDashboard.tsx
+
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 import { Link } from 'react-router-dom';
@@ -33,7 +33,7 @@ const AdminDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
+        
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl mb-6 shadow-lg">
             <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,9 +66,9 @@ const AdminDashboard: React.FC = () => {
           </div>
         ) : stats ? (
           <>
-            {/* Stats Cards - Now all clickable where appropriate */}
+          
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-              {/* Total Users Card */}
+          
               <Link
                 to="/admin/users"
                 className="group relative bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 overflow-hidden cursor-pointer"
@@ -92,7 +92,7 @@ const AdminDashboard: React.FC = () => {
                 </div>
               </Link>
 
-              {/* Total Stores Card */}
+             
               <Link
                 to="/admin/stores"
                 className="group relative bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 overflow-hidden cursor-pointer"
@@ -116,9 +116,8 @@ const AdminDashboard: React.FC = () => {
                 </div>
               </Link>
 
-              {/* Total Ratings Card - NOW A LINK */}
               <Link
-                to="/admin/ratings" // <-- New Link for Ratings Management
+                to="/admin/ratings" 
                 className="group relative bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 overflow-hidden cursor-pointer"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-purple-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -141,14 +140,14 @@ const AdminDashboard: React.FC = () => {
               </Link>
             </div>
 
-            {/* Management Cards (No change needed here as they were already Links) */}
+           
             <div className="mb-8">
               <h3 className="text-3xl font-bold text-slate-800 mb-2 text-center">Quick Actions</h3>
               <p className="text-slate-600 text-center mb-8">Manage your platform efficiently</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {/* Manage Users Card */}
+             
               <Link
                 to="/admin/users"
                 className="group relative bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 overflow-hidden"
@@ -179,7 +178,7 @@ const AdminDashboard: React.FC = () => {
                 </div>
               </Link>
 
-              {/* Manage Stores Card */}
+            
               <Link
                 to="/admin/stores"
                 className="group relative bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 overflow-hidden"

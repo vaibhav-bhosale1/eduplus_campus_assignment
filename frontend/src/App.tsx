@@ -5,7 +5,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
 import Login from './components/Auth/Login'; // Single login component
-import Register from './components/Auth/Register'; // Renamed from RegisterUser or similar
+import Register from './components/Auth/Register'; 
 import Navbar from './components/Common/Navbar';
 import HomePage from './pages/HomePage';
 import AdminDashboard from './components/Admin/AdminDashboard';
@@ -23,7 +23,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} /> {/* Ensure this matches your Register component file */}
+          <Route path="/register" element={<Register />} /> 
           <Route path="/" element={<HomePage/>} />
           <Route path="/update-password" element={<ProtectedRoute><UpdatePasswordPage /></ProtectedRoute>} />
 

@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
-import Toast from '../Common/Toast'; // Import the new Toast component
-
+import Toast from '../Common/Toast'; 
 interface Store {
   id: string;
   name: string;
@@ -15,7 +14,7 @@ interface Store {
 const StoreList: React.FC = () => {
   const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(''); // Kept for main fetch error display
+  const [error, setError] = useState(''); 
 
   const [searchName, setSearchName] = useState('');
   const [searchAddress, setSearchAddress] = useState('');
@@ -43,7 +42,7 @@ const StoreList: React.FC = () => {
 
   const fetchStores = async () => {
     setLoading(true);
-    setError(''); // Clear main error for fetch operations
+    setError('');
     try {
       const params = new URLSearchParams();
       if (searchName) params.append('name', searchName);
@@ -55,8 +54,7 @@ const StoreList: React.FC = () => {
       setStores(res.data);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to fetch stores.');
-      // You could also show a toast here for the fetch error if preferred:
-      // showCustomToast(err.response?.data?.message || 'Failed to load stores.', 'error');
+    
     } finally {
       setLoading(false);
     }
@@ -64,14 +62,14 @@ const StoreList: React.FC = () => {
 
   useEffect(() => {
     fetchStores();
-  }, [searchName, searchAddress, sortField, sortOrder]); // Re-fetch on filter/sort change
+  }, [searchName, searchAddress, sortField, sortOrder]); 
 
   const handleRatingChange = (storeId: string, value: number) => {
     setRatingToSubmit(prev => ({ ...prev, [storeId]: value }));
   };
 
   const handleSubmitRating = async (storeId: string) => {
-    dismissToast(); // Dismiss any existing toasts before new submission
+    dismissToast(); 
     const rating = ratingToSubmit[storeId];
     if (rating === undefined || rating < 1 || rating > 5) {
       showCustomToast('Please select a rating between 1 and 5 before submitting.', 'error');
@@ -80,13 +78,13 @@ const StoreList: React.FC = () => {
     try {
       await api.post('/ratings', { storeId, value: rating });
       showCustomToast('Rating submitted successfully!', 'success');
-      // Clear the rating input for that store
+     
       setRatingToSubmit(prev => {
         const newState = { ...prev };
         delete newState[storeId];
         return newState;
       });
-      fetchStores(); // Refresh stores to see updated overall and user-submitted ratings
+      fetchStores(); 
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Failed to submit rating.';
       showCustomToast(errorMessage, 'error');
@@ -94,7 +92,7 @@ const StoreList: React.FC = () => {
   };
 
   const handleModifyRating = async (storeId: string) => {
-    dismissToast(); // Dismiss any existing toasts before new submission
+    dismissToast();
     const rating = ratingToSubmit[storeId];
     if (rating === undefined || rating < 1 || rating > 5) {
       showCustomToast('Please select a rating between 1 and 5 before modifying.', 'error');
@@ -103,13 +101,13 @@ const StoreList: React.FC = () => {
     try {
       await api.put('/ratings', { storeId, value: rating });
       showCustomToast('Rating modified successfully!', 'success');
-      // Clear the rating input for that store
+
       setRatingToSubmit(prev => {
         const newState = { ...prev };
         delete newState[storeId];
         return newState;
       });
-      fetchStores(); // Refresh stores to see updated overall and user-submitted ratings
+      fetchStores(); 
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Failed to modify rating.';
       showCustomToast(errorMessage, 'error');
@@ -364,13 +362,13 @@ const StoreList: React.FC = () => {
           </div>
         )}
       </div>
-      {/* Toast Notification */}
+    
       {showToast && (
         <Toast
           message={toastMessage}
           type={toastType}
           onDismiss={dismissToast}
-          duration={3000} // Toast will disappear after 3 seconds
+          duration={3000} 
         />
       )}
     </div>

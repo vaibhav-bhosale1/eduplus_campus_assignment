@@ -19,7 +19,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles, children 
     return <Navigate to="/" replace />;
   }
 
-  // ✅ Render children if passed, else render nested route <Outlet />
+ 
   return <>{children ? children : <Outlet />}</>;
 };
 

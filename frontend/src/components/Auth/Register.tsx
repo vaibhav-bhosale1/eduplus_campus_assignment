@@ -2,17 +2,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
-import Toast from '../Common/Toast'; // Import the new Toast component
+import Toast from '../Common/Toast';
 
 const Register: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [address, setAddress] = useState('');
-  // Role is hardcoded to NORMAL_USER in this form as per your previous code
-  // If you need role selection on register, you'd add a state for it here.
-
-  // Replaced 'error' and 'success' states with toast states
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error' | 'info'>('info');
@@ -33,9 +29,8 @@ const Register: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dismissToast(); // Dismiss any existing toasts before new submission
+    dismissToast();
 
-    // Frontend validations (basic, backend handles comprehensive)
     if (name.length < 20 || name.length > 60) {
       showCustomToast('Name must be between 20 and 60 characters.', 'error');
       return;
@@ -49,7 +44,6 @@ const Register: React.FC = () => {
       showCustomToast('Password must be 8-16 characters long, include at least one uppercase letter and one special character.', 'error');
       return;
     }
-    // Basic email regex for client-side
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       showCustomToast('Please enter a valid email address.', 'error');
@@ -57,18 +51,15 @@ const Register: React.FC = () => {
     }
 
     try {
-      // Assuming 'NORMAL_USER' is the default role for public registration
       await api.post('/auth/register', { name, email, password, address, role: 'NORMAL_USER' });
       showCustomToast('Registration successful! You can now log in.', 'success');
       setName('');
       setEmail('');
       setPassword('');
       setAddress('');
-      
-      // Redirect after a short delay to allow toast to be seen
       setTimeout(() => {
         navigate('/login');
-      }, 1500); // 1.5 second delay
+      }, 1500);
     } catch (err: any) {
       const msg = err.response?.data?.message || 'Registration failed.';
       showCustomToast(msg, 'error');
@@ -77,20 +68,15 @@ const Register: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-100 to-purple-100 flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Background circles */}
       <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-gradient-to-br from-purple-300 to-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
       <div className="absolute top-1/2 right-1/4 w-72 h-72 bg-gradient-to-br from-blue-300 to-green-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
       <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-gradient-to-br from-yellow-300 to-orange-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
 
       <div className="relative w-full max-w-md">
-        {/* Main Card */}
         <div className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/20 relative overflow-hidden">
-          {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 rounded-3xl"></div>
-          
-          {/* Content */}
+
           <div className="relative z-10">
-            {/* Header */}
             <div className="text-center mb-8">
               <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300">
                 <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,13 +89,7 @@ const Register: React.FC = () => {
               <p className="text-slate-600">Join us today! Please fill in your details</p>
             </div>
 
-            {/* Error/Success messages removed as Toast handles feedback */}
-            {/* {error && (...) } */}
-            {/* {success && (...) } */}
-
-            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Name Field */}
               <div className="group">
                 <label className="block text-sm font-semibold text-slate-700 mb-2 group-focus-within:text-green-600 transition-colors duration-200">
                   Full Name
@@ -132,7 +112,6 @@ const Register: React.FC = () => {
                 </div>
               </div>
 
-              {/* Email Field */}
               <div className="group">
                 <label className="block text-sm font-semibold text-slate-700 mb-2 group-focus-within:text-green-600 transition-colors duration-200">
                   Email Address
@@ -155,7 +134,6 @@ const Register: React.FC = () => {
                 </div>
               </div>
 
-              {/* Address Field */}
               <div className="group">
                 <label className="block text-sm font-semibold text-slate-700 mb-2 group-focus-within:text-green-600 transition-colors duration-200">
                   Address
@@ -179,7 +157,6 @@ const Register: React.FC = () => {
                 </div>
               </div>
 
-              {/* Password Field */}
               <div className="group">
                 <label className="block text-sm font-semibold text-slate-700 mb-2 group-focus-within:text-green-600 transition-colors duration-200">
                   Password
@@ -202,7 +179,6 @@ const Register: React.FC = () => {
                 </div>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white/80"
@@ -215,7 +191,6 @@ const Register: React.FC = () => {
                 </span>
               </button>
 
-              {/* Divider */}
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-slate-300"></div>
@@ -225,7 +200,6 @@ const Register: React.FC = () => {
                 </div>
               </div>
 
-              {/* Login Link */}
               <div className="text-center">
                 <p className="text-slate-600 text-sm mb-2">Already have an account?</p>
                 <Link 
@@ -242,7 +216,6 @@ const Register: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Decoration */}
         <div className="mt-8 text-center">
           <p className="text-slate-500 text-sm">
             Secure registration with industry-standard encryption
@@ -250,13 +223,12 @@ const Register: React.FC = () => {
         </div>
       </div>
 
-      {/* Toast Notification */}
       {showToast && (
         <Toast
           message={toastMessage}
           type={toastType}
           onDismiss={dismissToast}
-          duration={3000} // Toast will disappear after 3 seconds
+          duration={3000}
         />
       )}
 
@@ -265,15 +237,15 @@ const Register: React.FC = () => {
           background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
           background-size: 24px 24px;
         }
-        
+
         .animation-delay-1000 {
           animation-delay: 1s;
         }
-        
+
         .animation-delay-2000 {
           animation-delay: 2s;
         }
-        
+
         @keyframes blob {
           0% {
             transform: translate(0px, 0px) scale(1);
@@ -288,16 +260,17 @@ const Register: React.FC = () => {
             transform: translate(0px, 0px) scale(1);
           }
         }
+
         .animate-blob {
           animation: blob 7s infinite;
         }
-        
+
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
           25% { transform: translateX(-5px); }
           75% { transform: translateX(5px); }
         }
-        
+
         .animate-shake {
           animation: shake 0.5s ease-in-out;
         }

@@ -1,18 +1,18 @@
-// frontend/src/components/Auth/Login.tsx
+
 import React, { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
-import Toast from '../Common/Toast'; // Import the new Toast component
+import Toast from '../Common/Toast';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // Removed 'error' state as toasts will handle feedback, but the 'error' variable is still defined for clarity in logic flow.
+  
   const [error, setError] = useState(''); 
-  const [showToast, setShowToast] = useState(false); // State to control toast visibility
-  const [toastMessage, setToastMessage] = useState(''); // State for toast message
-  const [toastType, setToastType] = useState<'success' | 'error' | 'info'>('info'); // State for toast type
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState(''); 
+  const [toastType, setToastType] = useState<'success' | 'error' | 'info'>('info'); 
 
   const navigate = useNavigate();
   const { dispatch } = useAuth();
@@ -48,17 +48,16 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(''); // Clear any old inline errors
-    dismissToast(); // Dismiss any existing toasts
+    setError('');
+    dismissToast(); 
 
     try {
       const res = await api.post('/auth/login', { email, password });
       
-      showCustomToast('Login successful!', 'success'); // Show success toast
+      showCustomToast('Login successful!', 'success'); 
 
       dispatch({ type: 'LOGIN', payload: res.data });
       
-      // Redirect after a short delay to allow toast to be seen
       setTimeout(() => {
         if (res.data.role === 'SYSTEM_ADMIN') {
           navigate('/admin/dashboard');
@@ -69,25 +68,24 @@ const Login: React.FC = () => {
         } else {
           navigate('/');
         }
-      }, 1000); // 1 second delay
+      }, 1000); 
     } catch (err: any) {
       const msg = err.response?.data?.message || 'Login failed. Please check your credentials.';
-      setError(msg); // Still set error for potential inline display if toast isn't enough
-      showCustomToast(msg, 'error'); // Show error toast
+      setError(msg); 
+      showCustomToast(msg, 'error'); 
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-100 to-purple-100 flex items-center justify-center p-6">
       <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-      
-      {/* Floating Elements */}
+
       <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-r from-blue-200 to-purple-200 rounded-full opacity-20 animate-pulse"></div>
       <div className="absolute bottom-20 right-20 w-24 h-24 bg-gradient-to-r from-indigo-200 to-blue-200 rounded-full opacity-30 animate-pulse animation-delay-1000"></div>
       <div className="absolute top-1/2 left-10 w-16 h-16 bg-gradient-to-r from-purple-200 to-pink-200 rounded-full opacity-25 animate-pulse animation-delay-2000"></div>
       
       <div className="relative w-full max-w-md">
-        {/* Test Credentials Block */}
+
         <div className="bg-amber-50 border border-amber-200 text-amber-800 rounded-xl p-4 mb-6 shadow-md flex items-start space-x-3">
           <svg className="w-6 h-6 flex-shrink-0 text-amber-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -109,14 +107,13 @@ const Login: React.FC = () => {
           </div>
         </div>
 
-        {/* Main Card */}
+
         <div className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/20 relative overflow-hidden">
-          {/* Gradient Overlay */}
+
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 rounded-3xl"></div>
-          
-          {/* Content */}
+    
           <div className="relative z-10">
-            {/* Header */}
+           
             <div className="text-center mb-8">
               <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300">
                 <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,8 +126,7 @@ const Login: React.FC = () => {
               <p className="text-slate-600">Welcome back! Please sign in to continue</p>
             </div>
 
-            {/* Error Message (kept for direct form validation, but toast is primary) */}
-            {/* You can choose to remove this block if the toast is sufficient */}
+        
             {error && (
               <div className="mb-6 p-4 bg-red-50/80 backdrop-blur-sm border border-red-200 text-red-700 rounded-xl flex items-center animate-shake">
                 <svg className="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -140,9 +136,9 @@ const Login: React.FC = () => {
               </div>
             )}
 
-            {/* Form */}
+
             <div onSubmit={handleSubmit} className="space-y-6">
-              {/* Email Field */}
+       
               <div className="group">
                 <label className="block text-sm font-semibold text-slate-700 mb-2 group-focus-within:text-blue-600 transition-colors duration-200">
                   Email Address
@@ -165,7 +161,6 @@ const Login: React.FC = () => {
                 </div>
               </div>
 
-              {/* Password Field */}
               <div className="group">
                 <label className="block text-sm font-semibold text-slate-700 mb-2 group-focus-within:text-blue-600 transition-colors duration-200">
                   Password
@@ -188,7 +183,6 @@ const Login: React.FC = () => {
                 </div>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 onClick={handleSubmit}
@@ -202,7 +196,7 @@ const Login: React.FC = () => {
                 </span>
               </button>
 
-              {/* Divider */}
+            
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-slate-300"></div>
@@ -212,7 +206,6 @@ const Login: React.FC = () => {
                 </div>
               </div>
 
-              {/* Sign Up Link */}
               <div className="text-center">
                 <p className="text-slate-600 text-sm mb-2">Don't have an account?</p>
                 <Link 
@@ -229,7 +222,6 @@ const Login: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Decoration */}
         <div className="mt-8 text-center">
           <p className="text-slate-500 text-sm">
             Secure login powered by modern encryption
@@ -237,13 +229,12 @@ const Login: React.FC = () => {
         </div>
       </div>
 
-      {/* Toast Notification */}
       {showToast && (
         <Toast
           message={toastMessage}
           type={toastType}
           onDismiss={dismissToast}
-          duration={3000} // Toast will disappear after 3 seconds
+          duration={3000} 
         />
       )}
 

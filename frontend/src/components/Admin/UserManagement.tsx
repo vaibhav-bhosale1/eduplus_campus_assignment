@@ -1,4 +1,4 @@
-// frontend/src/components/Admin/UserManagement.tsx
+
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 
@@ -25,7 +25,7 @@ const UserManagement: React.FC = () => {
   const [sortField, setSortField] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
 
-  // New user form states
+  
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [newUserName, setNewUserName] = useState('');
   const [newUserEmail, setNewUserEmail] = useState('');
@@ -90,7 +90,7 @@ const UserManagement: React.FC = () => {
         setNewUserPassword('');
         setNewUserAddress('');
         setNewUserRole('NORMAL_USER');
-        fetchUsers(); // Refresh user list
+        fetchUsers(); 
     } catch (err: any) {
         setAddUserError(err.response?.data?.message || 'Failed to add user.');
     }
@@ -99,7 +99,7 @@ const UserManagement: React.FC = () => {
 return (
   <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-6">
     <div className="max-w-7xl mx-auto">
-      {/* Header Section */}
+    
       <div className="mb-8">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
           User Management
@@ -107,7 +107,7 @@ return (
         <p className="text-slate-600 text-lg">Manage your users with ease and style</p>
       </div>
 
-      {/* Add User Button */}
+  
       <div className="mb-6 flex justify-end">
         <button
           onClick={() => setShowAddUserModal(true)}
@@ -123,7 +123,7 @@ return (
         </button>
       </div>
 
-      {/* Add User Modal */}
+  
       {showAddUserModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50 p-4">
           <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-200 transform transition-all duration-300 scale-100">
@@ -229,7 +229,6 @@ return (
         </div>
       )}
 
-      {/* Filters Section */}
       <div className="mb-8 p-6 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20">
         <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
           <svg className="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -299,7 +298,7 @@ return (
         </div>
       </div>
 
-      {/* Error Messages */}
+   
       {error && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex items-center">
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -309,7 +308,6 @@ return (
         </div>
       )}
 
-      {/* Content Section */}
       {loading ? (
         <div className="flex justify-center items-center py-16">
           <div className="relative">

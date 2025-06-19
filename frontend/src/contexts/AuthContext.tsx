@@ -8,7 +8,7 @@ interface User {
   name: string;
   email: string;
   role: 'SYSTEM_ADMIN' | 'NORMAL_USER' | 'STORE_OWNER';
-  token: string; // Ensure the token is part of the User interface
+  token: string; 
 }
 
 interface AuthState {
@@ -24,7 +24,7 @@ type AuthAction = { type: 'LOGIN'; payload: User } | { type: 'LOGOUT' };
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case 'LOGIN':
-      // Store the entire user object including token
+    
       localStorage.setItem('user', JSON.stringify(action.payload));
       return {
         user: action.payload,
@@ -34,7 +34,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         isStoreOwner: action.payload.role === 'STORE_OWNER',
       };
     case 'LOGOUT':
-      localStorage.removeItem('user'); // Clear user from localStorage
+      localStorage.removeItem('user'); 
       return {
         user: null,
         isAuthenticated: false,
@@ -84,18 +84,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }
 }, []);
-// Run only once on mount
 
-  // Define the logout function
   const logout = () => {
     dispatch({ type: 'LOGOUT' });
   };
 
-  // Pass state, dispatch, AND logout down to consumers
   const contextValue = {
     state,
     dispatch,
-    logout, // <-- LOGOUT FUNCTION INCLUDED HERE
+    logout, 
   };
 
   return (
@@ -110,7 +107,7 @@ export const useAuth = () => {
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
-  // Destructure state for easier access, and return dispatch AND logout
+ 
   const { user, isAuthenticated, isAdmin, isNormalUser, isStoreOwner } = context.state;
   return { user, isAuthenticated, isAdmin, isNormalUser, isStoreOwner, dispatch: context.dispatch, logout: context.logout };
 };

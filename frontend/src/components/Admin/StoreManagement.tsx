@@ -1,7 +1,7 @@
-// frontend/src/components/Admin/StoreManagement.tsx
+
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
-import Toast from '../Common/Toast'; // Import the new Toast component
+import Toast from '../Common/Toast'; 
 
 interface Store {
   id: string;
@@ -24,7 +24,7 @@ interface StoreOwnerOption {
 const StoreManagement: React.FC = () => {
   const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(''); // Kept for main fetch error display
+  const [error, setError] = useState(''); 
   
   const [filterName, setFilterName] = useState('');
   const [filterEmail, setFilterEmail] = useState('');
@@ -33,13 +33,12 @@ const StoreManagement: React.FC = () => {
   const [sortField, setSortField] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
 
-  // Add Store Modal States
+  
   const [showAddStoreModal, setShowAddStoreModal] = useState(false);
   const [newStoreName, setNewStoreName] = useState('');
   const [newStoreEmail, setNewStoreEmail] = useState('');
   const [newStoreAddress, setNewStoreAddress] = useState('');
   const [newStoreOwnerId, setNewStoreOwnerId] = useState('');
-  // Replaced addStoreError/Success with toast states
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error' | 'info'>('info');
@@ -60,7 +59,7 @@ const StoreManagement: React.FC = () => {
 
   const fetchStores = async () => {
     setLoading(true);
-    setError(''); // Clear main error
+    setError('');
     try {
       const params = new URLSearchParams();
       if (filterName) params.append('name', filterName);
@@ -84,7 +83,7 @@ const StoreManagement: React.FC = () => {
       setStoreOwners(res.data.map((user: any) => ({ id: user.id, name: user.name })));
     } catch (err: any) {
       console.error('Failed to fetch store owners:', err.response?.data?.message || err.message);
-      // Not showing toast for this background fetch, but good to log
+      
     }
   };
 
@@ -104,11 +103,7 @@ const StoreManagement: React.FC = () => {
 
   const handleAddStore = async (e: React.FormEvent) => {
     e.preventDefault();
-    dismissToast(); // Dismiss any existing toasts
-    // Clear addStoreError/Success states (no longer directly used but good practice if needed elsewhere)
-    // setAddStoreError(''); 
-    // setAddStoreSuccess('');
-
+  dismissToast();  
     try {
       await api.post('/admin/stores', {
         name: newStoreName,
@@ -127,14 +122,14 @@ const StoreManagement: React.FC = () => {
     } catch (err: any) {
       const msg = err.response?.data?.message || 'Failed to add store.';
       showCustomToast(msg, 'error');
-      // setAddStoreError(msg); // If you still want to display an error directly in modal
+     
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
+       
         <div className="mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
             Store Management
@@ -142,7 +137,7 @@ const StoreManagement: React.FC = () => {
           <p className="text-slate-600 text-lg">Oversee all registered stores and their details</p>
         </div>
 
-        {/* Add Store Button */}
+    
         <div className="mb-6 flex justify-end">
           <button
             onClick={() => setShowAddStoreModal(true)}
@@ -158,7 +153,7 @@ const StoreManagement: React.FC = () => {
           </button>
         </div>
 
-        {/* Add Store Modal */}
+       
         {showAddStoreModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50 p-4">
             <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-200 transform transition-all duration-300 scale-100">
@@ -167,9 +162,7 @@ const StoreManagement: React.FC = () => {
                 <div className="w-16 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"></div>
               </div>
               
-              {/* addStoreError and addStoreSuccess replaced by Toast */}
-              {/* {addStoreError && (...) } */}
-              {/* {addStoreSuccess && (...) } */}
+        
               
               <form onSubmit={handleAddStore} className="space-y-4">
                 <div>
@@ -242,7 +235,7 @@ const StoreManagement: React.FC = () => {
           </div>
         )}
 
-        {/* Filters Section */}
+      
         <div className="mb-8 p-6 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20">
           <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
             <svg className="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -293,7 +286,7 @@ const StoreManagement: React.FC = () => {
           </div>
         </div>
 
-        {/* Error Messages (main fetch error) */}
+       
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex items-center">
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -302,8 +295,7 @@ const StoreManagement: React.FC = () => {
             {error}
           </div>
         )}
-
-        {/* Content Section */}
+    
         {loading ? (
           <div className="flex justify-center items-center py-16">
             <div className="relative">
@@ -429,13 +421,13 @@ const StoreManagement: React.FC = () => {
           </div>
         )}
       </div>
-      {/* Toast Notification */}
+    
       {showToast && (
         <Toast
           message={toastMessage}
           type={toastType}
           onDismiss={dismissToast}
-          duration={3000} // Toast will disappear after 3 seconds
+          duration={3000} 
         />
       )}
     </div>

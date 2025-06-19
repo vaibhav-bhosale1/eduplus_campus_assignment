@@ -8,18 +8,18 @@ const api = axios.create({
   },
 });
 
-// Request Interceptor: Attach the JWT token to outgoing requests
+
 api.interceptors.request.use(
   (config) => {
-    // IMPORTANT: Retrieve the user object (which contains the token) from localStorage
-    const userString = localStorage.getItem('user'); // Get the stringified user object
+    
+    const userString = localStorage.getItem('user');
     if (userString) {
       try {
-        const user = JSON.parse(userString); // Parse it
-        const token = user.token; // Access the token property
+        const user = JSON.parse(userString); 
+        const token = user.token; 
 
         if (token) {
-          config.headers.Authorization = `Bearer ${token}`; // Attach as Bearer token
+          config.headers.Authorization = `Bearer ${token}`; 
           console.log('DEBUG (Frontend API Interceptor): Token found and attached.');
         } else {
           console.log('DEBUG (Frontend API Interceptor): User object found, but no token property.');

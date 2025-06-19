@@ -8,17 +8,17 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 text-gray-800 p-4 sm:p-8">
-      {/* Main Content Area */}
+   
       <div className="max-w-4xl w-full text-center py-16 px-6 rounded-lg shadow-xl bg-white/90 backdrop-blur-sm border border-gray-100">
         
-        {/* Header Section */}
+       
         <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-gray-900 leading-tight mb-6">
           Store Ratings <span className="text-blue-600">Platform</span>
         </h1>
        
 
         {isAuthenticated ? (
-          /* Authenticated User View */
+        
           <div className="mt-8">
             <h2 className="text-3xl font-semibold mb-6 text-gray-800">
               Welcome, <span className="text-blue-600">{user?.name}</span> ({user?.role ? user.role.replace('_', ' ') : 'Unknown role'})
@@ -51,8 +51,7 @@ const HomePage: React.FC = () => {
             </div>
           </div>
         ) : (
-          /* Unauthenticated User View */
-          /* Unauthenticated User View */
+          
 <div className="mt-10 text-center">
   <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
     Join the experience today.

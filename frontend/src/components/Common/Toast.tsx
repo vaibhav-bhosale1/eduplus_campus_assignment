@@ -5,23 +5,22 @@ interface ToastProps {
   message: string;
   type: 'success' | 'error' | 'info';
   onDismiss: () => void;
-  duration?: number; // Duration in milliseconds before auto-dismiss (default: 3000ms)
+  duration?: number; 
 }
 
 const Toast: React.FC<ToastProps> = ({ message, type, onDismiss, duration = 3000 }) => {
   const [isVisible, setIsVisible] = useState(true);
 
-  // Auto-dismiss after 'duration'
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
-      onDismiss(); // Call onDismiss prop when toast hides
+      onDismiss(); 
     }, duration);
 
-    return () => clearTimeout(timer); // Cleanup timer on unmount or re-render
+    return () => clearTimeout(timer); 
   }, [duration, onDismiss]);
 
-  // Determine styling based on type
   const toastClasses = {
     success: 'bg-green-500 border-green-700',
     error: 'bg-red-500 border-red-700',
