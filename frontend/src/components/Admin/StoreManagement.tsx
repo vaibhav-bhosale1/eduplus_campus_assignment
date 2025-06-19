@@ -90,7 +90,7 @@ const StoreManagement: React.FC = () => {
     setAddStoreSuccess('');
 
     try {
-      const _res = await api.post('/admin/stores', { // Fixed 'res' unused
+      await api.post('/admin/stores', { // Fixed 'res' unused
         name: newStoreName,
         email: newStoreEmail,
         address: newStoreAddress,

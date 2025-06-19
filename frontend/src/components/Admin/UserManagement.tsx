@@ -76,7 +76,7 @@ const UserManagement: React.FC = () => {
     setAddUserSuccess('');
 
     try {
-        const _res = await api.post('/admin/users', {
+         await api.post('/admin/users', {
             name: newUserName,
             email: newUserEmail,
             password: newUserPassword,
