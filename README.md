@@ -1,10 +1,20 @@
 
 # 🛒 RateNest- Store Ratings App - Full-Stack MERN Application
-deployed on https://ratenest-eight.vercel.app/
-for testing purpose use 
-System admin credential:
-email:system@gmail.com
-password:System@12345
+
+## 🚀 Deployment
+
+The application is deployed and available at:  
+🔗 [https://ratenest-eight.vercel.app](https://ratenest-eight.vercel.app)
+
+---
+
+## 🧪 Testing Credentials
+
+You can use the following credentials to log in as a **System Administrator** for testing purposes:
+
+- **Email:** `system@gmail.com`  
+- **Password:** `System@12345`
+
 
 A robust full-stack web application designed to manage stores and user ratings, featuring distinct roles for system administrators, store owners, and normal users.
 
