@@ -76,7 +76,7 @@ const UserManagement: React.FC = () => {
     setAddUserSuccess('');
 
     try {
-        const res = await api.post('/admin/users', {
+        const _res = await api.post('/admin/users', {
             name: newUserName,
             email: newUserEmail,
             password: newUserPassword,
@@ -401,7 +401,7 @@ return (
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {users.map((user, index) => (
+                {users.map((user, _index) => (
                   <tr key={user.id} className="hover:bg-blue-50/50 transition duration-200 group">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">

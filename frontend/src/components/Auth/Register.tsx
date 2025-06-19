@@ -40,7 +40,7 @@ const Register: React.FC = () => {
 
 
     try {
-      const res = await api.post('/auth/register', { name, email, password, address, role: 'NORMAL_USER' });
+      const _res = await api.post('/auth/register', { name, email, password, address, role: 'NORMAL_USER' });
       setSuccess('Registration successful! You can now log in.');
       setName('');
       setEmail('');
