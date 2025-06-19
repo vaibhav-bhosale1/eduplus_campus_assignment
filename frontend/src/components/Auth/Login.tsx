@@ -8,7 +8,8 @@ import Toast from '../Common/Toast'; // Import the new Toast component
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(''); // Keep for direct form validation, if needed
+  // Removed 'error' state as toasts will handle feedback, but the 'error' variable is still defined for clarity in logic flow.
+  const [error, setError] = useState(''); 
   const [showToast, setShowToast] = useState(false); // State to control toast visibility
   const [toastMessage, setToastMessage] = useState(''); // State for toast message
   const [toastType, setToastType] = useState<'success' | 'error' | 'info'>('info'); // State for toast type
@@ -86,6 +87,28 @@ const Login: React.FC = () => {
       <div className="absolute top-1/2 left-10 w-16 h-16 bg-gradient-to-r from-purple-200 to-pink-200 rounded-full opacity-25 animate-pulse animation-delay-2000"></div>
       
       <div className="relative w-full max-w-md">
+        {/* Test Credentials Block */}
+        <div className="bg-amber-50 border border-amber-200 text-amber-800 rounded-xl p-4 mb-6 shadow-md flex items-start space-x-3">
+          <svg className="w-6 h-6 flex-shrink-0 text-amber-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div>
+            <h3 className="font-bold text-lg mb-1 text-amber-700">For Testing Purposes:</h3>
+            <p className="text-sm">
+              You can log in as a **System Administrator** using these credentials:
+            </p>
+            <p className="text-sm font-semibold mt-2">
+              Email: <code className="bg-amber-100 px-2 py-1 rounded">system@gmail.com</code>
+            </p>
+            <p className="text-sm font-semibold">
+              Password: <code className="bg-amber-100 px-2 py-1 rounded">System@12345</code>
+            </p>
+            <p className="text-xs text-amber-600 mt-2">
+             (Remember to replace `admin@example.com` and `AdminPassword123!` with the actual admin credentials you set up, Also this credentials are only for testing purpose please do not misuse it)
+            </p>
+          </div>
+        </div>
+
         {/* Main Card */}
         <div className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/20 relative overflow-hidden">
           {/* Gradient Overlay */}
