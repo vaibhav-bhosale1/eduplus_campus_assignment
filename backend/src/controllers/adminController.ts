@@ -186,6 +186,7 @@ export const getAllStoresAdmin = async (req: Request, res: Response): Promise<vo
           select: {
             id: true,
             name: true,
+            email:true,
           }
         }
       },

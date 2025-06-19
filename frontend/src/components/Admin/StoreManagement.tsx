@@ -1,5 +1,5 @@
 // frontend/src/components/Admin/StoreManagement.tsx
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import api from '../../services/api';
 
 interface Store {
@@ -95,7 +95,7 @@ const StoreManagement: React.FC = () => {
     setAddStoreSuccess('');
 
     try {
-        const res = await api.post('/admin/stores', {
+        const _res = await api.post('/admin/stores', {
             name: newStoreName,
             email: newStoreEmail,
             address: newStoreAddress,
@@ -401,7 +401,7 @@ const StoreManagement: React.FC = () => {
               </thead>
               
               <tbody className="bg-white divide-y divide-gray-100">
-                {stores.map((store, index) => (
+                {stores.map((store, _index) => (
                   <tr key={store.id} className="hover:bg-blue-50 transition-colors duration-200 group">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
