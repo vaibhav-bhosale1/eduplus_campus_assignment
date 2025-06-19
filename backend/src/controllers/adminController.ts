@@ -112,7 +112,7 @@ export const addNewStore = async (req: Request, res: Response): Promise<void> =>
 
     let owner: User | null = null;
     if (ownerId) {
-      owner = await prisma.user.findFirst({
+      owner = await prisma.user.findUnique({
         where: { id: ownerId, role: Role.STORE_OWNER }
       });
       if (!owner) {
@@ -128,6 +128,15 @@ export const addNewStore = async (req: Request, res: Response): Promise<void> =>
         address,
         ownerId: owner?.id,
       },
+      include: { // Include owner to return it in the response for immediate confirmation
+        owner: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        }
+      }
     });
 
     res.status(201).json(newStore);
@@ -168,13 +177,22 @@ export const getAllStoresAdmin = async (req: Request, res: Response): Promise<vo
 };
 
   const stores: StoreWithRatings[] = await prisma.store.findMany({
-      where: whereClause,
+        where: whereClause,
       include: {
-        ratings: { select: { value: true } },
+        ratings: {
+          select: { value: true }
+        },
+        owner: { // <-- CRITICAL: Include the owner relation here
+          select: {
+            id: true,
+            name: true,
+          }
+        }
       },
-      orderBy,
+      orderBy: orderBy,
     });
-    
+
+      console.log('DEBUG: Raw stores fetched for admin (including owner):', JSON.stringify(stores, null, 2));
 
 
     

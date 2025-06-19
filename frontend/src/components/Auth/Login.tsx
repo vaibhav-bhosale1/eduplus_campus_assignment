@@ -9,7 +9,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { login: authContextLogin } = useAuth(); // Renamed to avoid conflict with local 'login'
+   const { dispatch } = useAuth(); // Renamed to avoid conflict with local 'login'
   const location = useLocation(); // Get the current location object
 
   // Extract the 'role' query parameter from the URL for the title hint
@@ -37,8 +37,7 @@ const Login: React.FC = () => {
       const res = await api.post('/auth/login', { email, password });
       
       // Use the login function from AuthContext to set user state and local storage
-      authContextLogin(res.data); 
-      
+      dispatch({ type: 'LOGIN', payload: res.data });
       // Redirect based on the role returned by the backend
       if (res.data.role === 'SYSTEM_ADMIN') {
         navigate('/admin/dashboard');

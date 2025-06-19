@@ -8,13 +8,23 @@ const prisma = new PrismaClient();
 // Custom decoded token interface
 interface DecodedToken {
   id: string;
-  role: Role;
+  role: 'SYSTEM_ADMIN' | 'NORMAL_USER' | 'STORE_OWNER';
   iat: number;
   exp: number;
 }
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: string;
+        role: 'SYSTEM_ADMIN' | 'NORMAL_USER' | 'STORE_OWNER';
+      };
+    }
+  }
+}
 // 🛡️ Middleware: Protect route using JWT
-export const protect: RequestHandler = async (req, res, next) => {
+export const protect: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   let token: string | undefined;
 
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -34,6 +44,8 @@ export const protect: RequestHandler = async (req, res, next) => {
       }
 
       req.user = user;
+       console.log('DEBUG (Protect): Token Decoded User ID:', decoded.id);
+      console.log('DEBUG (Protect): User fetched from DB for token:', req.user);
       next(); // ✅ no need to return next()
       return;
     } catch (error) {
@@ -46,15 +58,18 @@ export const protect: RequestHandler = async (req, res, next) => {
   res.status(401).json({ message: 'Not authorized, no token' });
   return;
 };
-export const authorizeRoles = (...roles: Role[]): RequestHandler => {
+export const authorizeRoles = (...roles: Array<'SYSTEM_ADMIN' | 'NORMAL_USER' | 'STORE_OWNER'>): RequestHandler => {
   return (req: Request, res: Response, next: NextFunction): void => {
+     console.log('DEBUG (AuthorizeRoles): Checking roles...');
+    console.log('DEBUG (AuthorizeRoles): Required roles:', roles);
+    console.log('DEBUG (AuthorizeRoles): User role from req.user:', req.user?.role);
     if (!req.user || !roles.includes(req.user.role)) {
       res.status(403).json({
         message: 'Forbidden: You do not have permission to perform this action',
       });
       return;
     }
-
+   console.log('DEBUG (AuthorizeRoles): Access GRANTED for user role:', req.user.role);
     next(); // no return needed for next()
   };
 };
