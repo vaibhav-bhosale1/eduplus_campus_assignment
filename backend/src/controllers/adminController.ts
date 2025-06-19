@@ -1,4 +1,4 @@
-// backend/src/controllers/adminController.ts
+
 import { Request, Response } from 'express';
 import { prisma } from '../server';
 import bcrypt from 'bcryptjs';
@@ -7,7 +7,6 @@ import { Role, User } from '../../generated/prisma';
 type StoreWithRatings = Awaited<ReturnType<typeof prisma.store.findMany>>[number];
 type UserWithStores = Awaited<ReturnType<typeof prisma.user.findMany>>[number];
 
-// ----------------- Dashboard Stats -----------------
 export const getDashboardStats = async (req: Request, res: Response): Promise<void> => {
   try {
     const totalUsers = await prisma.user.count();
@@ -23,7 +22,6 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
   }
 };
 
-// ----------------- Add New User -----------------
 export const addNewUser = async (req: Request, res: Response): Promise<void> => {
   const { name, email, password, address, role } = req.body;
 
@@ -88,7 +86,6 @@ export const addNewUser = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-// ----------------- Add New Store -----------------
 export const addNewStore = async (req: Request, res: Response): Promise<void> => {
   const { name, email, address, ownerId } = req.body;
 
@@ -128,7 +125,7 @@ export const addNewStore = async (req: Request, res: Response): Promise<void> =>
         address,
         ownerId: owner?.id,
       },
-      include: { // Include owner to return it in the response for immediate confirmation
+      include: { 
         owner: {
           select: {
             id: true,
@@ -147,8 +144,6 @@ export const addNewStore = async (req: Request, res: Response): Promise<void> =>
     return;
   }
 };
-
-// ----------------- Get All Stores (Admin View) -----------------
 
 export const getAllStoresAdmin = async (req: Request, res: Response): Promise<void> => {
   const { name, email, address, sortField, sortOrder } = req.query;
@@ -182,7 +177,7 @@ export const getAllStoresAdmin = async (req: Request, res: Response): Promise<vo
         ratings: {
           select: { value: true }
         },
-        owner: { // <-- CRITICAL: Include the owner relation here
+        owner: { 
           select: {
             id: true,
             name: true,
@@ -218,7 +213,6 @@ export const getAllStoresAdmin = async (req: Request, res: Response): Promise<vo
   }
 };
 
-// ----------------- Get All Users (Admin View) -----------------
 export const getAllUsersAdmin = async (req: Request, res: Response): Promise<void> => {
   const { name, email, address, role, sortField, sortOrder } = req.query;
 
@@ -284,14 +278,14 @@ export const getAllRatingsAdmin = async (req: Request, res: Response) => {
   try {
     const ratings = await prisma.rating.findMany({
       include: {
-        user: { // Include the user who submitted the rating
+        user: { 
           select: {
             id: true,
             name: true,
             email: true,
           },
         },
-        store: { // Include the store that was rated
+        store: { 
           select: {
             id: true,
             name: true,
@@ -300,7 +294,7 @@ export const getAllRatingsAdmin = async (req: Request, res: Response) => {
         },
       },
       orderBy: {
-        createdAt: 'desc', // Order by most recent ratings first
+        createdAt: 'desc',
       },
     });
 

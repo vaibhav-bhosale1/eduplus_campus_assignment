@@ -1,8 +1,8 @@
-// backend/src/controllers/ratingController.ts
+
 import { Request, Response } from 'express';
 import { prisma } from '../server';
 
-// Submit a rating
+
 export const submitRating = async (req: Request, res: Response) => {
   const { storeId, value } = req.body;
   const userId = req.user?.id;
@@ -47,7 +47,6 @@ export const submitRating = async (req: Request, res: Response) => {
   }
 };
 
-// Modify a submitted rating
 export const modifyRating = async (req: Request, res: Response) => {
   const { storeId, value } = req.body;
   const userId = req.user?.id;

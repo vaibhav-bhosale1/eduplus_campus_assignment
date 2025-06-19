@@ -1,15 +1,14 @@
-// backend/src/controllers/authController.ts
+
 import { Request, Response } from 'express';
-import { prisma } from '../server'; // Assuming prisma is exported from server.ts
+import { prisma } from '../server'; 
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/generateToken';
-import { Role } from '../../generated/prisma'; // Correct import path for Prisma generated types
+import { Role } from '../../generated/prisma'; 
 
-// User Registration (for NORMAL_USERs via public signup)
+
 export const registerUser = async (req: Request, res: Response) => {
-  const { name, email, password, address } = req.body; // 'role' should NOT be accepted from public registration
+  const { name, email, password, address } = req.body; 
 
-  // Validation
   if (!name || !email || !password || !address) {
      res.status(400).json({ message: 'Please enter all fields' });
      return;
@@ -47,11 +46,11 @@ export const registerUser = async (req: Request, res: Response) => {
         email,
         password: hashedPassword,
         address,
-        role: Role.NORMAL_USER, // Always default to NORMAL_USER for public registration
+        role: Role.NORMAL_USER,
       },
     });
 
-    // Ensure a user object is always returned if creation is successful
+    
     res.status(201).json({
       id: newUser.id,
       name: newUser.name,
@@ -67,26 +66,25 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 };
 
-// User Login (single endpoint for all roles)
+
 export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
     const user = await prisma.user.findUnique({ where: { email } });
 
-    // Check if user exists and password matches
     if (user && (await bcrypt.compare(password, user.password))) {
-      // If credentials are valid, return the user data including their actual role
+     
       res.json({
         id: user.id,
         name: user.name,
         email: user.email,
         address: user.address,
-        role: user.role, // This is the crucial part: retrieve the actual role from the DB
+        role: user.role, 
         token: generateToken(user.id, user.role),
       });
     } else {
-      // Invalid email or password
+    
       res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
@@ -95,10 +93,10 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 };
 
-// Update Password
+
 export const updatePassword = async (req: Request, res: Response) => {
   const { oldPassword, newPassword } = req.body;
-  const userId = req.user?.id; // Assuming req.user is populated by authMiddleware
+  const userId = req.user?.id;
 
   if (!userId || !oldPassword || !newPassword) {
      res.status(400).json({ message: 'Please provide old and new passwords' });

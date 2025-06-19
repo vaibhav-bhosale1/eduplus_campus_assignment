@@ -31,15 +31,14 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   ratings   Rating[]
-  stores    Store[]   // For Store Owners to link to their stores
+  stores    Store[]  
 }
-
 model Store {
   id        String   @id @default(uuid())
   name      String   @unique
   email     String   @unique
   address   String
-  ownerId   String?  // Optional: Link to a User with Role STORE_OWNER
+  ownerId   String?  
   owner     User?    @relation(fields: [ownerId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -58,7 +57,7 @@ model Rating {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([userId, storeId]) // A user can only rate a store once
+  @@unique([userId, storeId]) 
   @@index([userId])
   @@index([storeId])
 }
